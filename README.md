@@ -1,6 +1,8 @@
 
 # TempTalk
 
+![TempTalk](/resources/temptalk.gif)
+
 ## Introduction
 TempTalk is a web platform designed for quickly creating disposable chat rooms. With an emphasis on privacy and ease of use, TempTalk allows users to instantly create a chat room by simply entering a name for the room. This feature makes it ideal for temporary discussions, online workshops, and private conversations without the need for registration or long-term commitment.
 
