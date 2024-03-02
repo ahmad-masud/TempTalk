@@ -2,11 +2,9 @@
 # TempTalk
 
 ## Introduction
-
 TempTalk is a web platform designed for quickly creating disposable chat rooms. With an emphasis on privacy and ease of use, TempTalk allows users to instantly create a chat room by simply entering a name for the room. This feature makes it ideal for temporary discussions, online workshops, and private conversations without the need for registration or long-term commitment.
 
 ## Features
-
 - **Disposable Chat Rooms**: Create a chat room with just a name and discard it after use.
 - **Instant Setup**: No sign-up or login required. Start chatting immediately.
 - **Privacy Focused**: Conversations are not stored long-term, ensuring privacy and confidentiality.
@@ -16,13 +14,11 @@ TempTalk is a web platform designed for quickly creating disposable chat rooms. 
 ## Getting Started
 
 ### Prerequisites
-
 Before you can run TempTalk locally, make sure you have the following installed:
 - Node.js (latest stable version recommended)
 - npm (usually comes with Node.js)
 
 ### Installation
-
 To set up TempTalk on your local machine, follow these steps:
 
 1. Clone the repository to your local machine:
@@ -48,7 +44,6 @@ npm start
 This will run the app in the development mode. Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
 
 ## Usage
-
 To create a chat room:
 
 1. Navigate to the TempTalk homepage.
@@ -59,9 +54,7 @@ To create a chat room:
 Rooms are automatically disposed of after all participants leave.
 
 ## Contributing
-
 We welcome contributions to TempTalk! If you have suggestions for improvements or encounter any issues, please feel free to open an issue or submit a pull request on our GitHub repository.
 
 ## License
-
-TempTalk is open-sourced under the MIT License. See the ![LICENSE] for more details.
+Distributed under the MIT License. See [MIT License](LICENSE) for more information.
