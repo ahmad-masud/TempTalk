@@ -20,7 +20,6 @@ function Header({ roomName, onDeleteRoom }) {
     const handleSubmit = (event) => {
       event.preventDefault();
       Cookies.set('userAlias', alias, { expires: 7 });
-      alert(`Alias set to: ${alias}`);
     };
 
     const copyUrl = () => {
