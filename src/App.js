@@ -7,7 +7,7 @@ import './styles/App.css';
 
 function App() {
   useEffect(() => {
-    if (!Cookies.get('userid')) {
+    if (!Cookies.get('userId')) {
       Cookies.set('userId', Math.random().toString(36).substring(7), { expires: 7 });
     }
   }, []);

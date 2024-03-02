@@ -46,6 +46,10 @@
     border: 1px solid #ccc;
 }
 
+.message:first-child {
+    margin-top: auto;
+}
+
 .localMessage {
     align-self: flex-end;
 }
