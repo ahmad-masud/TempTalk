@@ -1,0 +1,55 @@
+.roomCreationContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100vw;
+    height: 100vh;
+}
+
+.roomCreationSubContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    max-width: 400px;
+    margin: 20px;
+}
+
+.creationTitle {
+    font-size: 1.5em;
+    font-weight: bold;
+}
+
+.creationForm {
+    display: flex;
+    width: 100%;
+}
+  
+.roomInput {
+    padding: 10px;
+    border-radius: 4px 0 0 4px;
+    border: 1px solid #ccc;
+    outline: none;
+    flex: 5;
+}
+
+.createRoomButton {
+    padding: 10px;
+    border: none;
+    border-radius: 0 4px 4px 0;
+    cursor: pointer;
+    border: 1px solid #ccc;
+    border-left: none;
+    font-weight: bold;
+    background: #fff;
+}
+  
+.createRoomButton:hover {
+    filter: brightness(90%);
+}
+
+.logo {
+    width: 100px;
+    height: 100px;
+}
