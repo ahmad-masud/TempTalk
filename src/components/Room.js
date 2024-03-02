@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { firestore } from '../config/firebase-config';
 import { collection, addDoc, query, orderBy, onSnapshot, serverTimestamp, doc, getDoc, deleteDoc } from 'firebase/firestore';
@@ -12,6 +12,7 @@ function Room() {
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState('');
   const [roomName, setRoomName] = useState('');
+  const messagesContainerRef = useRef(null);
 
   useEffect(() => {
     // Fetching room details including the room name
@@ -38,9 +39,14 @@ function Room() {
       });
       setMessages(messagesData);
     });
-  
     return () => unsubscribe(); // Cleanup on component unmount or roomId change
   }, [roomId, navigate]); // Dependencies array
+
+  useEffect(() => {
+    if (messagesContainerRef.current) {
+      messagesContainerRef.current.scrollTop = messagesContainerRef.current.scrollHeight;
+    }
+  }, [messages]);
 
   const sendMessage = async (e) => {
     e.preventDefault();
@@ -75,7 +81,7 @@ function Room() {
       <div className="roomContainer">
         <Header roomName={roomName} onDeleteRoom={handleDeleteRoom} />
         <div className="roomContentContainer">
-          <div className="messagesContainer">
+          <div className="messagesContainer" ref={messagesContainerRef}>
             {messages.map((message) => (
               <p key={message.id} className={Cookies.get('userId') === message.senderId ? "message localMessage" : 'message'}>
                 <p className="messageSender">{message.senderAlias ? `${message.senderAlias}` : 'Anonymous'}</p>
