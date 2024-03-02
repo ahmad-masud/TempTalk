@@ -30,6 +30,7 @@
 .messagesContainer {
     width: 100%;
     overflow-y: scroll;
+    scrollbar-width: none;
     overflow-x: hidden;
     display: flex;
     flex-direction: column;
@@ -44,7 +45,15 @@
     border-radius: 4px;
     border: 1px solid #ccc;
 }
+
+.localMessage {
+    align-self: flex-end;
+}
   
+.localMessage .messageSender {
+    display: none;
+}
+
 .messageSender {
     font-weight: bold;
 }

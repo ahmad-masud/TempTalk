@@ -45,12 +45,14 @@ function Room() {
   const sendMessage = async (e) => {
     e.preventDefault();
     if (newMessage.trim() === '') return; // Prevent sending empty messages
-    const alias = Cookies.get('userAlias') || 'Anonymous'; // Access the alias directly from cookies
+    const alias = Cookies.get('userAlias') || ''; // Access the alias directly from cookies
+    const userId = Cookies.get('userId') || '';
     const messagesRef = collection(firestore, `rooms/${roomId}/messages`);
     await addDoc(messagesRef, {
       text: newMessage,
       createdAt: serverTimestamp(),
-      sender: alias, // Use the alias obtained from cookies
+      senderAlias: alias, // Use the alias obtained from cookies
+      senderId: userId
     });
     setNewMessage('');
   };
@@ -75,8 +77,8 @@ function Room() {
         <div className="roomContentContainer">
           <div className="messagesContainer">
             {messages.map((message) => (
-              <p key={message.id} className="message">
-                <p className="messageSender">{message.sender ? `${message.sender}` : ''}</p>
+              <p key={message.id} className={Cookies.get('userId') === message.senderId ? "message localMessage" : 'message'}>
+                <p className="messageSender">{message.senderAlias ? `${message.senderAlias}` : 'Anonymous'}</p>
                 <p className="messageContent">{message.text}</p>
               </p>
             ))}
