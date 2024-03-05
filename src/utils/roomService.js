@@ -2,10 +2,11 @@
 import { firestore } from '../config/firebase-config';
 import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
 
-export const createRoom = async (roomName) => {
+export const createRoom = async (roomName, roomAdminId) => {
   const roomRef = await addDoc(collection(firestore, "rooms"), {
-    name: roomName, // Store the room name
-    createdAt: serverTimestamp(), // Use server timestamp for the creation time
+    name: roomName,
+    adminId: roomAdminId,
+    createdAt: serverTimestamp(), 
   });
-  return roomRef.id; // Returns the newly created room's ID
+  return roomRef.id;
 };

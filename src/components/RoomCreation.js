@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { createRoom } from '../utils/roomService';
+import Cookies from 'js-cookie';
 import '../styles/RoomCreation.css';
 
 function RoomCreation() {
@@ -13,7 +14,7 @@ function RoomCreation() {
       alert("Please enter a room name.");
       return;
     }
-    const roomId = await createRoom(roomName);
+    const roomId = await createRoom(roomName, Cookies.get('userId'));
     if (roomId) {
       navigate(`/room/${roomId}`);
     } else {

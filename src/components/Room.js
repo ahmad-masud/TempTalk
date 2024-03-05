@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { firestore } from '../config/firebase-config';
-import { collection, addDoc, query, orderBy, onSnapshot, serverTimestamp, doc, deleteDoc } from 'firebase/firestore';
+import { collection, addDoc, query, orderBy, onSnapshot, serverTimestamp, getDoc, doc, deleteDoc } from 'firebase/firestore';
 import Cookies from 'js-cookie';
 import Header from './Header';
 import '../styles/Room.css';
@@ -67,9 +67,14 @@ function Room() {
   const handleDeleteRoom = async () => {
     try {
       const roomRef = doc(firestore, `rooms/${roomId}`);
-      await deleteDoc(roomRef);
-      console.log(`Room with ID ${roomId} has been deleted.`);
-      navigate('/');
+      const roomDoc = await getDoc(roomRef);
+
+      if (roomDoc.data().adminId === Cookies.get('userId')) {
+        await deleteDoc(roomRef);
+        navigate('/');
+      } else {
+        alert("You are not authorized to delete this room.");
+      }
     } catch (error) {
       console.error("Error deleting room: ", error);
     }
