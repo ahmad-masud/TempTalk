@@ -5,6 +5,7 @@ import '../styles/Header.css';
 
 function Header({ roomName, onDeleteRoom }) {
     const [alias, setAlias] = useState('');
+    const [icon, setIcon] = useState('bi bi-copy');
   
     useEffect(() => {
       const storedAlias = Cookies.get('userAlias');
@@ -26,6 +27,10 @@ function Header({ roomName, onDeleteRoom }) {
       const url = window.location.href;
 
       navigator.clipboard.writeText(url).then(function() {
+        setIcon("bi bi-check-lg");
+        setTimeout(function() {
+          setIcon("bi bi-copy");
+        }, 2000);
       }, function(err) {
         console.error('Could not copy URL: ', err);
       });
@@ -34,12 +39,7 @@ function Header({ roomName, onDeleteRoom }) {
     return (
         <nav className="navbarContainer">
           <div className="logoSection">
-            <p>{roomName}</p>
-          </div>
-          <div className="header-buttons">
-            <button aria-label="copy url" className="header-button" onClick={copyUrl}><i className="bi bi-copy"></i></button>
-            <button aria-label="delete room" className="header-button" onClick={onDeleteRoom}><i className="bi bi-trash3"></i></button>
-            <Link to="/" aria-label="new room" className="header-button"><i className="bi bi-plus-lg"></i></Link>
+            <p className='roomName'>{roomName}</p>
           </div>
           <form onSubmit={handleSubmit} className="aliasForm">
             <input
@@ -51,6 +51,11 @@ function Header({ roomName, onDeleteRoom }) {
             />
             <button type="submit" className="aliasButton">Set</button>
           </form>
+          <div className="header-buttons">
+            <button aria-label="copy url" className="header-button" onClick={copyUrl}><i className={icon}></i></button>
+            <button aria-label="delete room" className="header-button" onClick={onDeleteRoom}><i className="bi bi-trash3"></i></button>
+            <Link to="/" aria-label="new room" className="header-button"><i className="bi bi-plus-lg"></i></Link>
+          </div>
         </nav>
     );
 }

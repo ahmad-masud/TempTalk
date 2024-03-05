@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { firestore } from '../config/firebase-config';
-import { collection, addDoc, query, orderBy, onSnapshot, serverTimestamp, doc, getDoc, deleteDoc } from 'firebase/firestore';
+import { collection, addDoc, query, orderBy, onSnapshot, serverTimestamp, doc, deleteDoc } from 'firebase/firestore';
 import Cookies from 'js-cookie';
 import Header from './Header';
 import '../styles/Room.css';
@@ -15,32 +15,33 @@ function Room() {
   const messagesContainerRef = useRef(null);
 
   useEffect(() => {
-    // Fetching room details including the room name
     const roomRef = doc(firestore, `rooms/${roomId}`);
-  
-    getDoc(roomRef).then((docSnap) => {
-      if (!docSnap.exists()) {
-        navigate('/'); // Redirect if room doesn't exist
+
+    const unsubscribeRoom = onSnapshot(roomRef, (docSnapshot) => {
+      if (!docSnapshot.exists()) {
+        navigate('/');
         return;
       }
-      // Assuming the room name is stored under a field named 'name'
-      const roomDetails = docSnap.data();
-      setRoomName(roomDetails.name); // Update the room name in the state
+      const roomDetails = docSnapshot.data();
+      setRoomName(roomDetails.name); 
     });
-  
-    // Fetching messages for the room
+
     const messagesRef = collection(firestore, `rooms/${roomId}/messages`);
     const q = query(messagesRef, orderBy('createdAt'));
-  
-    const unsubscribe = onSnapshot(q, (querySnapshot) => {
+
+    const unsubscribeMessages = onSnapshot(q, (querySnapshot) => {
       const messagesData = [];
       querySnapshot.forEach((doc) => {
-        messagesData.push({...doc.data(), id: doc.id});
+        messagesData.push({ ...doc.data(), id: doc.id });
       });
       setMessages(messagesData);
     });
-    return () => unsubscribe(); // Cleanup on component unmount or roomId change
-  }, [roomId, navigate]); // Dependencies array
+
+    return () => {
+      unsubscribeRoom();
+      unsubscribeMessages();
+    };
+  }, [roomId, navigate]);
 
   useEffect(() => {
     if (messagesContainerRef.current) {
@@ -50,14 +51,14 @@ function Room() {
 
   const sendMessage = async (e) => {
     e.preventDefault();
-    if (newMessage.trim() === '') return; // Prevent sending empty messages
-    const alias = Cookies.get('userAlias') || ''; // Access the alias directly from cookies
+    if (newMessage.trim() === '') return;
+    const alias = Cookies.get('userAlias') || '';
     const userId = Cookies.get('userId') || '';
     const messagesRef = collection(firestore, `rooms/${roomId}/messages`);
     await addDoc(messagesRef, {
       text: newMessage,
       createdAt: serverTimestamp(),
-      senderAlias: alias, // Use the alias obtained from cookies
+      senderAlias: alias,
       senderId: userId
     });
     setNewMessage('');
@@ -65,9 +66,7 @@ function Room() {
 
   const handleDeleteRoom = async () => {
     try {
-      // Reference to the document
       const roomRef = doc(firestore, `rooms/${roomId}`);
-      // Delete the document
       await deleteDoc(roomRef);
       console.log(`Room with ID ${roomId} has been deleted.`);
       navigate('/');
@@ -80,26 +79,24 @@ function Room() {
     <div className="roomPageContainer">
       <div className="roomContainer">
         <Header roomName={roomName} onDeleteRoom={handleDeleteRoom} />
-        <div className="roomContentContainer">
-          <div className="messagesContainer" ref={messagesContainerRef}>
-            {messages.map((message) => (
-              <p key={message.id} className={Cookies.get('userId') === message.senderId ? "message localMessage" : 'message'}>
-                <p className="messageSender">{message.senderAlias ? `${message.senderAlias}` : 'Anonymous'}</p>
-                <p className="messageContent">{message.text}</p>
-              </p>
-            ))}
-          </div>
-          <form onSubmit={sendMessage} className="messageForm">
-            <input
-              type="text"
-              value={newMessage}
-              onChange={(e) => setNewMessage(e.target.value)}
-              placeholder="Type a message"
-              className="messageInput"
-            />
-            <button type="submit" className="sendMessageButton"><i className="bi bi-send-fill"></i></button>
-          </form>
+        <div className="messagesContainer" ref={messagesContainerRef}>
+          {messages.map((message) => (
+            <p key={message.id} className={Cookies.get('userId') === message.senderId ? "message localMessage" : 'message'}>
+              <p className="messageSender">{message.senderAlias ? `${message.senderAlias}` : 'Anonymous'}</p>
+              <p className="messageContent">{message.text}</p>
+            </p>
+          ))}
         </div>
+        <form onSubmit={sendMessage} className="messageForm">
+          <input
+            type="text"
+            value={newMessage}
+            onChange={(e) => setNewMessage(e.target.value)}
+            placeholder="Type a message"
+            className="messageInput"
+          />
+          <button type="submit" className="sendMessageButton"><i className="bi bi-send-fill"></i></button>
+        </form>
       </div>
     </div>
   );

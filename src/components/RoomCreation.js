@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { createRoom } from '../utils/roomService'; // Adjust path as needed
+import { createRoom } from '../utils/roomService';
 import '../styles/RoomCreation.css';
 
 function RoomCreation() {
@@ -13,13 +13,10 @@ function RoomCreation() {
       alert("Please enter a room name.");
       return;
     }
-    // Call the service function to create a new room and get its ID
     const roomId = await createRoom(roomName);
     if (roomId) {
-      // Navigate to the newly created room
       navigate(`/room/${roomId}`);
     } else {
-      // Handle errors, such as displaying a message to the user
       console.error("Failed to create room.");
     }
   };

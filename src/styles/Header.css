@@ -2,15 +2,15 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 0 10px;
+    gap: 5px;
+    padding: 10px;
     background-color: white;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08);
     width: 100%;
     border-radius: 0 0 4px 4px;
-    height: 7.5%;
 }
 
-.logoSection p {
+.logoSection .roomName {
     text-decoration: none;
     font-size: 20px;
     font-weight: bold;
@@ -26,7 +26,7 @@
     border-radius: 4px 0 0 4px;
     border: 1px solid #ccc;
     outline: none;
-    width: 100px;
+    width: 100%;
 }
   
 .aliasButton {
@@ -54,13 +54,14 @@
 }
 
 .header-button {
-    padding: 5px;
+    padding: 4px 6px;
     border: none;
     border-radius: 4px;
     cursor: pointer;
     border: 1px solid #ccc;
     font-weight: bold;
     background: #fff;
+    color: black;
 }
 
 .header-button:hover {

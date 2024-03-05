@@ -31,7 +31,7 @@
     border-radius: 4px 0 0 4px;
     border: 1px solid #ccc;
     outline: none;
-    flex: 5;
+    width: 100%;
 }
 
 .createRoomButton {
@@ -43,6 +43,7 @@
     border-left: none;
     font-weight: bold;
     background: #fff;
+    color: black;
 }
   
 .createRoomButton:hover {
