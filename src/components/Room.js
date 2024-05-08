@@ -101,6 +101,7 @@ function Room() {
             </p>
           ))}
         </div>
+        {messages.length === 0 && <p className="noMessages">No messages yet. Be the first to send one.</p>}
         <form onSubmit={sendMessage} className="messageForm">
           <input
             type="text"

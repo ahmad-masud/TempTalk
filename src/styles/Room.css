@@ -98,4 +98,9 @@
     opacity: 0;
     cursor: text;
 }
+
+.noMessages {
+    color: #999;
+    align-self: center;
+}
   

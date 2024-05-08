@@ -31,6 +31,7 @@
   
 .aliasForm {
     display: flex;
+    align-items: center;
     gap: 5px;
 }
   
@@ -49,11 +50,11 @@
     cursor: pointer;
     border-left: none;
     font-weight: bold;
-    background: #007bff;
-    color: white;
+    color: black;
     display: flex;
     align-items: center;
     justify-content: center;
+    background: none;
 }
   
 .aliasButton:hover {
