@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { Menu, MenuItem, MenuButton } from '@szhsin/react-menu';
 import '@szhsin/react-menu/dist/index.css';
 import '../styles/Header.css';
+import { set } from 'firebase/database';
 
 function Header({ roomName, onDeleteRoom }) {
     const [alias, setAlias] = useState('');
@@ -19,6 +20,9 @@ function Header({ roomName, onDeleteRoom }) {
   
     const handleSubmit = (event) => {
       event.preventDefault();
+      if (alias.trim() === '') {
+        setAlias('anonymous');
+      }
       Cookies.set('userAlias', alias, { expires: 7 });
       setShowAliasForm(false);
     };
