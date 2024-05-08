@@ -17,10 +17,6 @@ function Header({ roomName, onDeleteRoom }) {
       }
     }, []);
   
-    const handleAliasChange = (event) => {
-      setAlias(event.target.value);
-    };
-  
     const handleSubmit = (event) => {
       event.preventDefault();
       Cookies.set('userAlias', alias, { expires: 7 });
@@ -51,7 +47,7 @@ function Header({ roomName, onDeleteRoom }) {
             {showAliasForm && <input
               type="text"
               value={alias}
-              onChange={handleAliasChange}
+              onChange={(e) => setAlias(e.target.value)}
               onBlur={handleSubmit}
               placeholder="Alias"
               className="aliasInput"

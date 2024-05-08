@@ -12,7 +12,6 @@ function Room() {
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState('');
   const [roomName, setRoomName] = useState('');
-  const [alias, setAlias] = useState('');
   const messagesContainerRef = useRef(null);
 
   useEffect(() => {
@@ -20,10 +19,7 @@ function Room() {
 
     if (!Cookies.get('userAlias')) {
       Cookies.set('userAlias', "anonymous", { expires: 7 });
-      setAlias(Cookies.get('userAlias'));
-    } else {
-      setAlias(Cookies.get('userAlias'));
-    }
+    } 
 
     const unsubscribeRoom = onSnapshot(roomRef, (docSnapshot) => {
       if (!docSnapshot.exists()) {
@@ -67,7 +63,7 @@ function Room() {
     await addDoc(messagesRef, {
       text: newMessage,
       createdAt: serverTimestamp(),
-      senderAlias: alias,
+      senderAlias: Cookies.get('userAlias'),
       senderId: userId
     });
     setNewMessage('');
