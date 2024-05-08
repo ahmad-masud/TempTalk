@@ -1,11 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import Cookies from 'js-cookie';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import { Menu, MenuItem, MenuButton } from '@szhsin/react-menu';
+import '@szhsin/react-menu/dist/index.css';
 import '../styles/Header.css';
 
 function Header({ roomName, onDeleteRoom }) {
     const [alias, setAlias] = useState('');
-    const [icon, setIcon] = useState('bi bi-copy');
+    const [showAliasForm, setShowAliasForm] = useState(false);
+    const navigate = useNavigate();
   
     useEffect(() => {
       const storedAlias = Cookies.get('userAlias');
@@ -21,16 +24,13 @@ function Header({ roomName, onDeleteRoom }) {
     const handleSubmit = (event) => {
       event.preventDefault();
       Cookies.set('userAlias', alias, { expires: 7 });
+      setShowAliasForm(false);
     };
 
     const copyUrl = () => {
       const url = window.location.href;
 
       navigator.clipboard.writeText(url).then(function() {
-        setIcon("bi bi-check-lg");
-        setTimeout(function() {
-          setIcon("bi bi-copy");
-        }, 2000);
       }, function(err) {
         console.error('Could not copy URL: ', err);
       });
@@ -38,24 +38,27 @@ function Header({ roomName, onDeleteRoom }) {
   
     return (
         <nav className="navbarContainer">
-          <div className="logoSection">
+          <div className="titleSection">
+            <Menu menuButton={<MenuButton className="menu-button"><i className="bi bi-three-dots-vertical"></i></MenuButton>}>
+              <MenuItem onClick={copyUrl}>Copy URL</MenuItem>
+              <MenuItem onClick={onDeleteRoom}>Delete Room</MenuItem>
+              <MenuItem onClick={() => navigate('/')}>New Room</MenuItem>
+            </Menu>
             <p className='roomName'>{roomName}</p>
           </div>
           <form onSubmit={handleSubmit} className="aliasForm">
-            <input
+            {!showAliasForm && <p className="alias">{alias}</p>}
+            {showAliasForm && <input
               type="text"
               value={alias}
               onChange={handleAliasChange}
+              onBlur={handleSubmit}
               placeholder="Alias"
               className="aliasInput"
-            />
-            <button type="submit" className="aliasButton">Set</button>
+              autoFocus
+            />}
+            {!showAliasForm && <button onClick={() => setShowAliasForm(!showAliasForm)} className="aliasButton"><i className="bi bi-pencil-fill"></i></button>}
           </form>
-          <div className="header-buttons">
-            <button aria-label="copy url" className="header-button" onClick={copyUrl}><i className={icon}></i></button>
-            <button aria-label="delete room" className="header-button" onClick={onDeleteRoom}><i className="bi bi-trash3"></i></button>
-            <Link to="/" aria-label="new room" className="header-button"><i className="bi bi-plus-lg"></i></Link>
-          </div>
         </nav>
     );
 }

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { createRoom } from '../utils/roomService';
 import Cookies from 'js-cookie';
@@ -7,6 +7,10 @@ import '../styles/RoomCreation.css';
 function RoomCreation() {
   const [roomName, setRoomName] = useState('');
   const navigate = useNavigate();
+
+  useEffect(() => {
+    document.title = `TempTalk`;
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();

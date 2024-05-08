@@ -12,10 +12,18 @@ function Room() {
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState('');
   const [roomName, setRoomName] = useState('');
+  const [alias, setAlias] = useState('');
   const messagesContainerRef = useRef(null);
 
   useEffect(() => {
     const roomRef = doc(firestore, `rooms/${roomId}`);
+
+    if (!Cookies.get('userAlias')) {
+      Cookies.set('userAlias', "anonymous", { expires: 7 });
+      setAlias(Cookies.get('userAlias'));
+    } else {
+      setAlias(Cookies.get('userAlias'));
+    }
 
     const unsubscribeRoom = onSnapshot(roomRef, (docSnapshot) => {
       if (!docSnapshot.exists()) {
@@ -25,6 +33,8 @@ function Room() {
       const roomDetails = docSnapshot.data();
       setRoomName(roomDetails.name); 
     });
+
+    document.title = `${roomName} | TempTalk`;
 
     const messagesRef = collection(firestore, `rooms/${roomId}/messages`);
     const q = query(messagesRef, orderBy('createdAt'));
@@ -41,7 +51,7 @@ function Room() {
       unsubscribeRoom();
       unsubscribeMessages();
     };
-  }, [roomId, navigate]);
+  }, [roomId, navigate, roomName]);
 
   useEffect(() => {
     if (messagesContainerRef.current) {
@@ -52,7 +62,6 @@ function Room() {
   const sendMessage = async (e) => {
     e.preventDefault();
     if (newMessage.trim() === '') return;
-    const alias = Cookies.get('userAlias') || '';
     const userId = Cookies.get('userId') || '';
     const messagesRef = collection(firestore, `rooms/${roomId}/messages`);
     await addDoc(messagesRef, {
@@ -87,7 +96,7 @@ function Room() {
         <div className="messagesContainer" ref={messagesContainerRef}>
           {messages.map((message) => (
             <p key={message.id} className={Cookies.get('userId') === message.senderId ? "message localMessage" : 'message'}>
-              <p className="messageSender">{message.senderAlias ? `${message.senderAlias}` : 'Anonymous'}</p>
+              <p className="messageSender">{message.senderAlias}</p>
               <p className="messageContent">{message.text}</p>
             </p>
           ))}
@@ -100,7 +109,7 @@ function Room() {
             placeholder="Type a message"
             className="messageInput"
           />
-          <button type="submit" className="sendMessageButton"><i className="bi bi-send-fill"></i></button>
+          <button type="submit" className="sendMessageButton" disabled={newMessage.trim() === ''}><i className="bi bi-send-fill"></i></button>
         </form>
       </div>
     </div>
